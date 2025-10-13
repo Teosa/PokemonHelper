@@ -11,11 +11,13 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Запуск" onAction="#onHelloButtonClick"/>
+    <Label fx:id="infoText"/>
+    <Button fx:id="startButton" text="Запуск" onAction="#onStartButtonClick"/>
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Label text="Врагов побеждено: "/>
-        <TextField fx:id="enemyCountField" disable="true"/>
+        <TextField fx:id="enemyCountField" disable="true" prefWidth="80"/>
+        <Label text=" из "/>
+        <TextField fx:id="enemyTargetQty" prefWidth="80"/>
     </HBox>
     <TextArea fx:id="myTextArea" promptText="Enter your text here..." wrapText="true" prefHeight="300"/>
 

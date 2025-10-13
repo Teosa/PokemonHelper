@@ -20,6 +20,9 @@ public class MovementService {
     }
 
     public void moveToFields() {
+//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Adjust timeout as needed
+//        WebElement modalElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("myModal")));
+
         resetLocation();
 
         Logger.getInstance().log("Идем к краю карты...");
@@ -45,21 +48,73 @@ public class MovementService {
         Logger.getInstance().log("Перемещение окончено");
 
         makeAutoButtle();
+        AppUtils.sleep(6000L);
 
-        Logger.getInstance().log("Ресурсы для боя окончены. Телепортация в город...");
+        if (Properties.getInstance().isLimitOver(enemyCountField.getText())) {
+            Logger.getInstance().log("Достигнут лимит врагов. Телепортация в город...");
+        } else {
+            Logger.getInstance().log("Ресурсы для боя окончены. Телепортация в город...");
+        }
+
         resetLocation();
+    }
+
+    public void heal() {
+        // Нажимаем на клетку напротив двери
+        Logger.getInstance().log("Заходим в ратушу...");
+        driver.findElement(By.xpath("//*[@id=\"coord-layer\"]/div[312]")).click();
+        AppUtils.sleep();
+
+        // Нажимаем на появившуюся зеленую стрелку
+        driver.findElement(By.className("exitbutton")).click();
+
+        AppUtils.sleep();
+
+        // Нажимаем на стойку с NPC
+        Logger.getInstance().log("Лечим покемонов...");
+        driver.findElement(By.xpath("//*[@id=\"coord-layer\"]/div[308]")).click();
+        AppUtils.sleep();
+
+        // Вызываем диалог с NPC
+        driver.findElement(By.className("VoiceNpc")).click();
+        AppUtils.sleep();
+
+        // Получаем окно диалога
+        var dialogWindow = driver.findElement(By.className("modal_npc_voice"));
+        // Получаем элемент с ответами
+        var answers = dialogWindow.findElement(By.className("Answer"));
+        // Выбираем первый ответ из списка (Вылечить покемонов)
+        answers.findElements(By.tagName("div")).get(0).click();
+
+        AppUtils.sleep();
+
+        // Идем обратно к двери
+        Logger.getInstance().log("Выходим из ратуши...");
+        driver.findElement(By.xpath("//*[@id=\"coord-layer\"]/div[316]")).click();
+
+        AppUtils.sleep();
+
+        // Нажимаем на пояявившуюся зеленую стрелку
+        driver.findElement(By.className("exitbutton")).click();
+
+        AppUtils.sleep();
+
+        // Возвращаемся на стартовую позицию
+        Logger.getInstance().log("Возврат на стартовую позицию...");
+        driver.findElement(By.xpath("//*[@id=\"coord-layer\"]/div[313]")).click();
+
+        AppUtils.sleep();
     }
 
     public void makeAutoButtle() {
         String battleWindowXpath = "//*[@id=\"battleMap\"]/div";
         boolean enoughSkillPointsQty = true;
 
-        while (enoughSkillPointsQty) {
+        while (enoughSkillPointsQty && !Properties.getInstance().isLimitOver(enemyCountField.getText())) {
             Logger.getInstance().log("Активация поиска врагов...");
             driver.findElement(By.className("VoiceWild")).click();
 
             while (AppUtils.findByXPath(driver, battleWindowXpath) == null) {
-                Logger.getInstance().log("Поиск противника...");
                 AppUtils.sleep();
             }
 
@@ -95,7 +150,7 @@ public class MovementService {
 
         if (grandma == null || !grandma.getAttribute("class").contains("activated npc")) {
             Logger.getInstance().log("Персонаж не в городе. Требуется ресет локации. Открываем карту...");
-            driver.findElement(By.xpath("/html/body/div[15]/div[3]/div[2]/div[1]")).click();
+            driver.findElement(By.className("mapBl")).click();
 
             AppUtils.sleep();
 

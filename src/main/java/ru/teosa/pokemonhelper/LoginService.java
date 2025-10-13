@@ -3,7 +3,6 @@ package ru.teosa.pokemonhelper;
 
 import lombok.AllArgsConstructor;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 
 @AllArgsConstructor

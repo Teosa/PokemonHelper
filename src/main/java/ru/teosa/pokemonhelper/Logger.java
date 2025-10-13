@@ -29,7 +29,7 @@ public class Logger {
     }
 
     public void log(String text) {
-        myTextArea.appendText(text + "\n");
+        myTextArea.appendText(AppUtils.getCurrentDateTimeFormated() + " - " + text + "\n");
     }
 
 }

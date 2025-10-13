@@ -18,13 +18,12 @@ public class PlayerInfoPanel {
     private List<Skill> skills;
 
     public PlayerInfoPanel(WebElement infoPanel, WebElement battlePanel) {
-        System.out.println("получение hpBarValue");
         String hpBarValue = infoPanel.findElement(By.className("hp_pok")).getText(); // 351 / 355
         List<String> hpBarValues = Arrays.stream(hpBarValue.split(" / ")).toList();
 
         this.currentHp = Integer.parseInt(hpBarValues.get(0));
         this.maxHp = Integer.parseInt(hpBarValues.get(1));
-        System.out.println("получение списка дивов со скилами");
+
         List<WebElement> skills = battlePanel.findElements(By.xpath("div"));
 
         this.skills = skills.stream()

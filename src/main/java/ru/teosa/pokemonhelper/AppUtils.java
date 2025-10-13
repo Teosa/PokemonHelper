@@ -5,6 +5,9 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class AppUtils {
 
     public static WebElement findByCssSelector(WebElement element, String cssSelector) {
@@ -45,5 +48,10 @@ public class AppUtils {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String getCurrentDateTimeFormated() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return formatter.format(LocalDateTime.now());
     }
 }
