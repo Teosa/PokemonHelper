@@ -1,9 +1,11 @@
-package ru.teosa.pokemonhelper;
+package ru.teosa.pokemonhelper.service;
 
 
 import lombok.AllArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import ru.teosa.pokemonhelper.utils.AppUtils;
+import ru.teosa.pokemonhelper.utils.Logger;
 
 @AllArgsConstructor
 public class LoginService {

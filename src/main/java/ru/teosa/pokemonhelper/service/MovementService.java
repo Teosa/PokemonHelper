@@ -1,8 +1,11 @@
-package ru.teosa.pokemonhelper;
+package ru.teosa.pokemonhelper.service;
 
 import javafx.scene.control.TextField;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import ru.teosa.pokemonhelper.utils.AppUtils;
+import ru.teosa.pokemonhelper.utils.Logger;
+import ru.teosa.pokemonhelper.configuration.Properties;
 
 public class MovementService {
 

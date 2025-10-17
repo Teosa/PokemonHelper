@@ -1,4 +1,4 @@
-package ru.teosa.pokemonhelper;
+package ru.teosa.pokemonhelper.ui;
 
 import lombok.Data;
 import org.openqa.selenium.By;
@@ -18,11 +18,7 @@ public class PlayerInfoPanel {
     private List<Skill> skills;
 
     public PlayerInfoPanel(WebElement infoPanel, WebElement battlePanel) {
-        String hpBarValue = infoPanel.findElement(By.className("hp_pok")).getText(); // 351 / 355
-        List<String> hpBarValues = Arrays.stream(hpBarValue.split(" / ")).toList();
-
-        this.currentHp = Integer.parseInt(hpBarValues.get(0));
-        this.maxHp = Integer.parseInt(hpBarValues.get(1));
+        updateCurrentHp(infoPanel);
 
         List<WebElement> skills = battlePanel.findElements(By.xpath("div"));
 
@@ -42,6 +38,14 @@ public class PlayerInfoPanel {
         return skills.stream()
                 .mapToInt(Skill::getCurrentPoints)
                 .sum();
+    }
+
+    public void updateCurrentHp(WebElement infoPanel) {
+        String hpBarValue = infoPanel.findElement(By.className("hp_pok")).getText(); // 351 / 355
+        List<String> hpBarValues = Arrays.stream(hpBarValue.split(" / ")).toList();
+
+        this.currentHp = Integer.parseInt(hpBarValues.get(0));
+        this.maxHp = Integer.parseInt(hpBarValues.get(1));
     }
 
 

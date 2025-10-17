@@ -1,10 +1,14 @@
-package ru.teosa.pokemonhelper;
+package ru.teosa.pokemonhelper.service;
 
 import lombok.AllArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import ru.teosa.pokemonhelper.utils.AppUtils;
+import ru.teosa.pokemonhelper.ui.EnemyInfoPanel;
+import ru.teosa.pokemonhelper.utils.Logger;
+import ru.teosa.pokemonhelper.ui.PlayerInfoPanel;
 
 @AllArgsConstructor
 public class BattleService {
@@ -17,13 +21,14 @@ public class BattleService {
 
         Logger.getInstance().log("Начало боя с " + enemyInfo.getName());
 
-        var playerInfoPanel = driver.findElement(By.xpath("//*[@id=\"battleMap\"]/div/div[3]/div[1]/div[3]/div[3]"));
+        var playerInfoPanel = getPlayerInfoPanel();
         PlayerInfoPanel playerInfo = new PlayerInfoPanel(playerInfoPanel, findBattlePanel());
 
         int attemptsQty = 0;
 
         while (enemyInfo.getCurrentHp() > 0) {
             AppUtils.sleep(2000L);
+            playerInfo.updateCurrentHp(getPlayerInfoPanel());
 
             if (playerInfo.getCurrentHp() <= 50) {
                 Logger.getInstance().log("Низкий уровень HP: " + playerInfo.getCurrentHp() + ". Выходим из битвы...");
@@ -43,6 +48,7 @@ public class BattleService {
                 attemptsQty++;
                 var skill = playerInfo.getAvalibleSkill();
                 skill.click(driver);
+                skill.setCurrentPoints(skill.getCurrentPoints() - 1);
 
                 AppUtils.sleep(2000L);
 
@@ -68,5 +74,9 @@ public class BattleService {
 
     private WebElement findBattlePanel() {
         return driver.findElement(By.className("move_battle"));
+    }
+
+    private WebElement getPlayerInfoPanel() {
+        return driver.findElement(By.xpath("//*[@id=\"battleMap\"]/div/div[3]/div[1]/div[3]/div[3]"));
     }
 }

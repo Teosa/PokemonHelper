@@ -1,4 +1,4 @@
-package ru.teosa.pokemonhelper;
+package ru.teosa.pokemonhelper.utils;
 
 import javafx.scene.control.TextArea;
 

@@ -1,4 +1,4 @@
-package ru.teosa.pokemonhelper;
+package ru.teosa.pokemonhelper.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -6,26 +6,36 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import lombok.Getter;
+import lombok.Setter;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import ru.teosa.pokemonhelper.configuration.Properties;
+import ru.teosa.pokemonhelper.service.LoginService;
+import ru.teosa.pokemonhelper.service.MovementService;
+import ru.teosa.pokemonhelper.utils.AppUtils;
+import ru.teosa.pokemonhelper.utils.Logger;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class HelloController implements Initializable {
+public class StartButtonController implements Initializable {
+
+    @Setter
+    @Getter
     private  WebDriver driver;
 
-    private  LoginService loginService;
+    private LoginService loginService;
 
-    private  MovementService movementService;
+    private MovementService movementService;
 
     private boolean isBrowserStarted;
 
     private boolean isLoggedIn;
 
-    public HelloController() {
+    public StartButtonController() {
         super();
     }
 
@@ -42,13 +52,17 @@ public class HelloController implements Initializable {
     private TextArea myTextArea;
 
     @FXML
+    private Label appVersion;
+
+    @FXML
     private Button startButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.driver = new ChromeDriver();
         this.loginService = new LoginService(driver);
         this.movementService = new MovementService(driver);
+
+        appVersion.setText("Version " + AppUtils.getApplicationVersion());
 
         // Предзаполняем поле сразу после открытия формы
         enemyTargetQty.setText("1000");
@@ -67,7 +81,7 @@ public class HelloController implements Initializable {
 
         Logger.getInstance(myTextArea).log("Запуск бота...");
 
-        new Thread(() -> {
+        Thread browserThread = new Thread(() -> {
             try {
                 if (!isBrowserStarted) {
                     driver.get("https://pokeroute.ru/world");
@@ -98,7 +112,10 @@ public class HelloController implements Initializable {
                 startButton.setDisable(false);
                 enemyTargetQty.setDisable(false);
             }
-        }).start();
+        });
+
+        browserThread.setDaemon(true);
+        browserThread.start();
     }
 
     public static String getStackTraceAsString(Throwable throwable) {

@@ -1,12 +1,15 @@
-package ru.teosa.pokemonhelper;
+package ru.teosa.pokemonhelper.utils;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Properties;
 
 public class AppUtils {
 
@@ -53,5 +56,23 @@ public class AppUtils {
     public static String getCurrentDateTimeFormated() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return formatter.format(LocalDateTime.now());
+    }
+
+    public static String getApplicationVersion() {
+        Properties props = new Properties();
+        String val = "Unknown";
+
+        try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("version.properties")) {
+
+            if (is != null) {
+                val = val + "props found";
+
+                props.load(is);
+                return props.getProperty("Version", "Unknown"); // "Unknown" as a fallback
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading pom.properties: " + e.getMessage());
+        }
+        return val;
     }
 }

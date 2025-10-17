@@ -1,4 +1,4 @@
-package ru.teosa.pokemonhelper;
+package ru.teosa.pokemonhelper.configuration;
 
 import lombok.Getter;
 

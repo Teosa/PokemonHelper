@@ -1,4 +1,4 @@
-package ru.teosa.pokemonhelper;
+package ru.teosa.pokemonhelper.ui;
 
 import lombok.Data;
 import org.openqa.selenium.By;

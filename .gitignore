@@ -5,5 +5,6 @@ logs/
 .mvn
 jpackage-in2/
 pokehelp/
+pokehelp_old/
 .jar
 dependency-reduced-pom.xml
