@@ -21,6 +21,7 @@ public class PokemonHelperApplication extends Application {
 
         StartButtonController controller = fxmlLoader.getController();
         controller.setDriver(new ChromeDriver());
+        controller.init();
 
         Scene scene = new Scene(root, 400, 500);
         stage.setTitle("Pokemon Helper");

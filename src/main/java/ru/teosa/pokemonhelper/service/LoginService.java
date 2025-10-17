@@ -39,8 +39,8 @@ public class LoginService {
                 var passwordField = loginForm.findElement(By.cssSelector("#uPass"));
                 var sendLoginFormButton = loginForm.findElement(By.cssSelector("#autorizeForm > button"));
 
-                loginField.sendKeys("Gliotto");
-                passwordField.sendKeys("13LowadiVpoleGliotta");
+                loginField.sendKeys("");
+                passwordField.sendKeys("");
 
                 Logger.getInstance().log("Логинимся");
                 sendLoginFormButton.click();

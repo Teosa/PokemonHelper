@@ -3,9 +3,10 @@ package ru.teosa.pokemonhelper.service;
 import javafx.scene.control.TextField;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import ru.teosa.pokemonhelper.configuration.Properties;
 import ru.teosa.pokemonhelper.utils.AppUtils;
 import ru.teosa.pokemonhelper.utils.Logger;
-import ru.teosa.pokemonhelper.configuration.Properties;
 
 public class MovementService {
 
@@ -26,7 +27,7 @@ public class MovementService {
 //        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Adjust timeout as needed
 //        WebElement modalElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("myModal")));
 
-        resetLocation();
+//        resetLocation();
 
         Logger.getInstance().log("Идем к краю карты...");
         driver.findElement(By.xpath("/html/body/div[17]/div/div[1]/div[3]/div[469]")).click();
@@ -59,7 +60,7 @@ public class MovementService {
             Logger.getInstance().log("Ресурсы для боя окончены. Телепортация в город...");
         }
 
-        resetLocation();
+//        resetLocation();
     }
 
     public void heal() {
@@ -147,32 +148,37 @@ public class MovementService {
         }
     }
 
-    private void resetLocation() {
-        Logger.getInstance().log("Проверка местонахождения...");
-        var grandma = AppUtils.findByXPath(driver, "//*[@id=\"coord-layer\"]/div[486]");
+    public void resetLocation() {
+//        Logger.getInstance().log("Проверка местонахождения...");
 
-        if (grandma == null || !grandma.getAttribute("class").contains("activated npc")) {
-            Logger.getInstance().log("Персонаж не в городе. Требуется ресет локации. Открываем карту...");
-            driver.findElement(By.className("mapBl")).click();
+        Logger.getInstance().log("Ресет локации. Открываем карту...");
+        driver.findElement(By.className("mapBl")).click();
 
-            AppUtils.sleep();
+        AppUtils.sleep();
 
-            Logger.getInstance().log("Выбираем Санталун...");
-            try {
-                driver.findElement(By.xpath("/html/body/div[19]/div[2]/div/div/div[8]")).click();
-            } catch (Exception e) {
-                Logger.getInstance().log("Выбираем Санталун2...");
-                driver.findElement(By.className("loc_santalunecity")).click();
-            }
+        Logger.getInstance().log("Выбираем Санталун...");
+        try {
+            driver.findElement(By.xpath("/html/body/div[19]/div[2]/div/div/div[8]")).click();
+        } catch (Exception e) {
+            Logger.getInstance().log("Выбираем Санталун2...");
+            driver.findElement(By.className("loc_santalunecity")).click();
+        }
 
-            AppUtils.sleep();
+        AppUtils.sleep();
 
+        WebElement teleportationButton = AppUtils.findByXPath(driver, "/html/body/div[4]/div[5]");
+
+        if (teleportationButton != null) {
             Logger.getInstance().log("Телепортируемся...");
-            driver.findElement(By.xpath("/html/body/div[4]/div[5]")).click();
+            teleportationButton.click();
 
             AppUtils.sleep();
             Logger.getInstance().log("Персонаж успешно перемещен в Санталун");
+        } else {
+            Logger.getInstance().log("Персонаж в Санталун. Телепортация не требуется");
+            driver.findElement(By.xpath("//*[@id=\"drgModel\"]/span/i")).click();
         }
+
     }
 
 }

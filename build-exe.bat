@@ -13,10 +13,12 @@ RMDIR /S /Q .\pokehelp\
  --name PokemonHelper  ^
  --main-jar pokemon-helper-1.2.jar  ^
  --main-class ru.teosa.pokemonhelper.PokemonHelperApplication  ^
- --java-options "--module-path D:\javafx-sdk-17.0.16\lib" ^
+ --java-options "--module-path app\javafx-sdk\lib" ^
  --java-options "--add-modules javafx.controls,javafx.fxml" ^
  --type app-image ^
 --dest "D:\IdeaProjects\Heap\PokemonHelper\pokehelp"
+
+xcopy "D:\javafx-sdk-17.0.16" "D:\IdeaProjects\Heap\PokemonHelper\pokehelp\PokemonHelper\app\javafx-sdk" /E/Y/I
 
 pause
 

@@ -1,15 +1,14 @@
 package ru.teosa.pokemonhelper.controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.Setter;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import ru.teosa.pokemonhelper.configuration.Properties;
 import ru.teosa.pokemonhelper.service.LoginService;
 import ru.teosa.pokemonhelper.service.MovementService;
@@ -18,14 +17,12 @@ import ru.teosa.pokemonhelper.utils.Logger;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.URL;
-import java.util.ResourceBundle;
 
-public class StartButtonController implements Initializable {
+public class StartButtonController {
 
     @Setter
     @Getter
-    private  WebDriver driver;
+    private WebDriver driver;
 
     private LoginService loginService;
 
@@ -34,10 +31,6 @@ public class StartButtonController implements Initializable {
     private boolean isBrowserStarted;
 
     private boolean isLoggedIn;
-
-    public StartButtonController() {
-        super();
-    }
 
     @FXML
     private Label infoText;
@@ -57,8 +50,10 @@ public class StartButtonController implements Initializable {
     @FXML
     private Button startButton;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+//    @FXML
+//    private Button testButton;
+
+    public void init() {
         this.loginService = new LoginService(driver);
         this.movementService = new MovementService(driver);
 
@@ -67,6 +62,15 @@ public class StartButtonController implements Initializable {
         // Предзаполняем поле сразу после открытия формы
         enemyTargetQty.setText("1000");
     }
+
+//    @FXML
+//    protected void onTestButtonClick() {
+//        var npcs = driver.findElements(By.className("npc"));
+//
+//        System.out.println(npcs.size());
+//
+//        npcs.get(0).click();
+//    }
 
     @FXML
     protected void onStartButtonClick() {
@@ -97,9 +101,10 @@ public class StartButtonController implements Initializable {
                 }
 
                 while (!Properties.getInstance().isLimitOver(enemyCountField.getText())) {
+                    movementService.resetLocation();
+                    movementService.heal();
                     myTextArea.clear();
                     movementService.moveToFields();
-                    movementService.heal();
                 }
 
 //                infoText.setText("Бот завершил работу " + AppUtils.getCurrentDateTimeFormated());

@@ -13,6 +13,7 @@
 
     <Label fx:id="infoText"/>
     <Button fx:id="startButton" text="Запуск" onAction="#onStartButtonClick"/>
+<!--    <Button fx:id="testButton" text="TEST" onAction="#onTestButtonClick"/>-->
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Label text="Врагов побеждено: "/>
         <TextField fx:id="enemyCountField" disable="true" prefWidth="80"/>
