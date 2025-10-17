@@ -3,11 +3,10 @@
  --name PokemonHelper  ^
  --main-jar PokemonHelper-1.0.jar  ^
  --main-class ru.teosa.pokemonhelper.HelloApplication  ^
- --java-options "--add-opens ru.teosa.pokemonhelper/ru.teosa.pokemonhelper=ALL-UNNAMED" ^
+ --java-options "--module-path D:\javafx-sdk-17.0.16\lib" ^
+ --java-options "--add-modules javafx.controls,javafx.fxml" ^
  --type app-image ^
- --module-path "D:\javafx-sdk-17.0.16\lib"  ^
- --add-modules javafx.controls,javafx.fxml ^
- --dest "D:\IdeaProjects\Heap\PokemonHelper\pokehelp"
+--dest "D:\IdeaProjects\Heap\PokemonHelper\pokehelp"
  
 pause
 
