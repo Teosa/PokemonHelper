@@ -4,6 +4,7 @@ import lombok.Data;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import ru.teosa.pokemonhelper.utils.AppUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +33,11 @@ public class Skill {
     }
 
     public void click(WebDriver webElement) {
-        webElement.findElement(By.className(webElementClassName)).click();
+        try {
+            webElement.findElement(By.className(webElementClassName)).click();
+        } catch (Exception e) {
+            AppUtils.sleep(200L);
+            webElement.findElement(By.className(webElementClassName)).click();
+        }
     }
 }

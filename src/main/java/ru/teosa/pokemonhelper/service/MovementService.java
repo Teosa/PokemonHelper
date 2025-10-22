@@ -149,8 +149,6 @@ public class MovementService {
     }
 
     public void resetLocation() {
-//        Logger.getInstance().log("Проверка местонахождения...");
-
         Logger.getInstance().log("Ресет локации. Открываем карту...");
         driver.findElement(By.className("mapBl")).click();
 
@@ -166,7 +164,8 @@ public class MovementService {
 
         AppUtils.sleep();
 
-        WebElement teleportationButton = AppUtils.findByXPath(driver, "/html/body/div[4]/div[5]");
+        WebElement teleportationButton = AppUtils.findByClass(driver, "btnFlyGo");
+        AppUtils.sleep(1000L);
 
         if (teleportationButton != null) {
             Logger.getInstance().log("Телепортируемся...");

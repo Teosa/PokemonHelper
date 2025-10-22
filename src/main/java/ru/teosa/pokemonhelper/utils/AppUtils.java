@@ -37,6 +37,14 @@ public class AppUtils {
         }
     }
 
+    public static WebElement findByClass(WebDriver driver, String className) {
+        try {
+            return driver.findElement(By.className(className));
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
     public static void sleep() {
         try {
             Thread.sleep(2000);
