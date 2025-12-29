@@ -11,6 +11,8 @@ import ru.teosa.pokemonhelper.configuration.Properties;
 import ru.teosa.pokemonhelper.utils.AppUtils;
 import ru.teosa.pokemonhelper.utils.Logger;
 
+import java.time.Duration;
+
 public class MovementService {
 
     private final WebDriver driver;
@@ -78,20 +80,57 @@ public class MovementService {
 //        resetLocation();
     }
 
-    public void heal(Location location) {
-        // Нажимаем на клетку напротив двери
-        Logger.getInstance().log("Заходим в ратушу...");
-        driver.findElement(By.xpath(location.getCityCenterDoor())).click();
+    private void move(int top, int left) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        // Находим элемент
+        WebElement element = driver.findElement(By.id("active-pointer"));
+
+//        System.out.println(element.getAttribute("outerHTML"));
+
+        String style = """
+                arguments[0].style.display = 'block';
+                arguments[0].style.visibility = 'visible';
+                arguments[0].style.opacity = '1';
+                arguments[0].style.top = '{Y}px';
+                arguments[0].style.left = '{X}px';
+                arguments[0].style.pointerEvents = 'auto';
+                """
+                .replace("{X}", String.valueOf(left))
+                .replace("{Y}", String.valueOf(top));
+
+        // Устанавливаем координаты и делаем кликабельным
+        js.executeScript(style, element);
+//        System.out.println(element.getAttribute("outerHTML"));
+
+        Actions actions = new Actions(driver);
+        actions
+                .moveToElement(element)
+                .pause(Duration.ofMillis(500))
+                .click()
+                .perform();
+//        System.out.println(element.getAttribute("outerHTML"));
         AppUtils.sleep();
+
+        js.executeScript("""
+                    arguments[0].style.pointerEvents = 'none';
+                    arguments[0].style.display = 'none';
+                """, element);
+    }
+
+    public void heal(Location location) {
+        Logger.getInstance().log("Заходим в ратушу...");
+        move(
+                location.getCityCenterDoor().getTop(),
+                location.getCityCenterDoor().getLeft());
 
         // Нажимаем на появившуюся зеленую стрелку
         driver.findElement(By.className("exitbutton")).click();
-
         AppUtils.sleep();
 
         // Нажимаем на стойку с NPC
         Logger.getInstance().log("Лечим покемонов...");
-        driver.findElement(By.xpath("//*[@id=\"coord-layer\"]/div[308]")).click();
+        move(128, 224);
         AppUtils.sleep();
 
         // Вызываем диалог с NPC
@@ -109,7 +148,7 @@ public class MovementService {
 
         // Идем обратно к двери
         Logger.getInstance().log("Выходим из ратуши...");
-        driver.findElement(By.xpath("//*[@id=\"coord-layer\"]/div[316]")).click();
+        move(288, 224);
 
         AppUtils.sleep();
 
@@ -120,9 +159,100 @@ public class MovementService {
 
         // Возвращаемся на стартовую позицию
         Logger.getInstance().log("Возврат на стартовую позицию...");
-        driver.findElement(By.xpath(location.getStartPosition())).click();
+        move(
+                location.getStartPosition().getTop(),
+                location.getStartPosition().getLeft());
 
         AppUtils.sleep();
+
+// ---------------------------------------------
+//        var currentPoint = driver.findElement(By.id("active-pointer"));
+//        System.out.println(currentPoint.getAttribute("outerHTML"));
+//
+//        JavascriptExecutor js = (JavascriptExecutor) driver;
+//
+//        js.executeScript("""
+//                arguments[0]
+//                .setAttribute('style', arguments[0].getAttribute('style')
+//                .replace('display: none;', 'top: 384px; left: 960px; display: none;'));
+//                """, currentPoint);
+//
+//        System.out.println(currentPoint.getAttribute("outerHTML"));
+//        Actions actions = new Actions(driver);
+//
+//        actions
+//                .moveToElement(currentPoint)
+//                .pause(Duration.ofMillis(500))
+//                .click()
+//                .perform();
+//
+//        System.out.println(currentPoint.getAttribute("outerHTML"));
+// ---------------------------------------------
+
+
+//        new Actions(driver)
+//                .click(currentPoint)  // явно указываем элемент для клика
+//                .perform();
+//        // Создаем JavascriptExecutor
+//        JavascriptExecutor js = (JavascriptExecutor) driver;
+//
+//// Или более безопасный вариант с get/setAttribute
+//        js.executeScript("""
+//                arguments[0]
+//                .setAttribute('style', arguments[0].getAttribute('style')
+//                .replace(/top:\\s*\\d+px/, 'top: 384px')
+//                .replace(/left:\\s*\\d+px/, 'left: 960px'))
+//
+//                """, currentPoint);
+//        AppUtils.sleep();
+//
+//        currentPoint.click();
+
+
+//        // Нажимаем на клетку напротив двери
+//        Logger.getInstance().log("Заходим в ратушу...");
+//        driver.findElement(By.xpath(location.getCityCenterDoor())).click();
+//        AppUtils.sleep();
+//
+//        // Нажимаем на появившуюся зеленую стрелку
+//        driver.findElement(By.className("exitbutton")).click();
+//
+//        AppUtils.sleep();
+//
+//        // Нажимаем на стойку с NPC
+//        Logger.getInstance().log("Лечим покемонов...");
+//        driver.findElement(By.xpath("//*[@id=\"coord-layer\"]/div[308]")).click();
+//        AppUtils.sleep();
+//
+//        // Вызываем диалог с NPC
+//        driver.findElement(By.className("VoiceNpc")).click();
+//        AppUtils.sleep();
+//
+//        // Получаем окно диалога
+//        var dialogWindow = driver.findElement(By.className("modal_npc_voice"));
+//        // Получаем элемент с ответами
+//        var answers = dialogWindow.findElement(By.className("Answer"));
+//        // Выбираем первый ответ из списка (Вылечить покемонов)
+//        answers.findElements(By.tagName("div")).get(0).click();
+//
+//        AppUtils.sleep();
+//
+//        // Идем обратно к двери
+//        Logger.getInstance().log("Выходим из ратуши...");
+//        driver.findElement(By.xpath("//*[@id=\"coord-layer\"]/div[316]")).click();
+//
+//        AppUtils.sleep();
+//
+//        // Нажимаем на пояявившуюся зеленую стрелку
+//        driver.findElement(By.className("exitbutton")).click();
+//
+//        AppUtils.sleep();
+//
+//        // Возвращаемся на стартовую позицию
+//        Logger.getInstance().log("Возврат на стартовую позицию...");
+//        driver.findElement(By.xpath(location.getStartPosition())).click();
+//
+//        AppUtils.sleep();
     }
 
     public void makeAutoButtle() {

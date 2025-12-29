@@ -2,6 +2,7 @@ package ru.teosa.pokemonhelper;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import ru.teosa.pokemonhelper.dto.MoveCoordinates;
 
 @Getter
 @RequiredArgsConstructor
@@ -11,18 +12,18 @@ public enum Location {
             "Санталун",
             "loc_santalunecity",
             null,
-            "//*[@id=\"coord-layer\"]/div[312]",
-            "//*[@id=\"coord-layer\"]/div[313]"
+            new MoveCoordinates(832, 864),
+            new MoveCoordinates(864, 864)
     ),
-    SNOWBELLECITY (
+    SNOWBELLECITY(
             "Сновбейлл",
             "loc_snowbellecity",
             null,
-            "//*[@id=\"coord-layer\"]/div[387]",
-            "//*[@id=\"coord-layer\"]/div[238]"
+            new MoveCoordinates(384, 960),
+            new MoveCoordinates(384, 864)
     ),
 
-    PATH_19("Тропа 19", "loc_route_19",  SNOWBELLECITY, null, null),
+    PATH_19("Тропа 19", "loc_route_19", SNOWBELLECITY, null, null),
     PATH_3("Тропа 3", "loc_route_3", Location.SANTALUN, null, null),
     ;
 
@@ -32,9 +33,9 @@ public enum Location {
 
     private final Location parent;
 
-    private final String cityCenterDoor;
+    private final MoveCoordinates cityCenterDoor;
 
-    private final String startPosition;
+    private final MoveCoordinates startPosition;
 
     public static Location getByName(String name) {
         for (Location location : Location.values()) {

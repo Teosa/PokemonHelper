@@ -105,8 +105,6 @@ public class StartButtonController {
                     movementService.changeLocation(selectedFarmLocation);
                     movementService.work();
                 }
-
-//                infoText.setText("Бот завершил работу " + AppUtils.getCurrentDateTimeFormated());
             } catch (Exception e) {
                 Logger.getInstance(myTextArea).log("Произошла ошибка. Бот остановлен");
                 infoText.setText("Произошла ошибка. Бот остановлен. Для возобновления работы нажмите кнопку Запуск");
