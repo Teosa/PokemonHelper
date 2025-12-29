@@ -12,8 +12,12 @@
     </padding>
 
     <Label fx:id="infoText"/>
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Место фарма"/>
+        <ComboBox fx:id="farmLocationCombo" prefWidth="200"/>
+    </HBox>
     <Button fx:id="startButton" text="Запуск" onAction="#onStartButtonClick"/>
-<!--    <Button fx:id="testButton" text="TEST" onAction="#onTestButtonClick"/>-->
+
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Label text="Врагов побеждено: "/>
         <TextField fx:id="enemyCountField" disable="true" prefWidth="80"/>

@@ -11,7 +11,7 @@ RMDIR /S /Q .\pokehelp\
 "C:\Program Files\Eclipse Adoptium\jdk-17.0.16.8-hotspot\bin\jpackage.exe"  ^
  --input "D:\IdeaProjects\Heap\PokemonHelper\jpackage-in2" ^
  --name PokemonHelper  ^
- --main-jar pokemon-helper-1.2.jar  ^
+ --main-jar pokemon-helper-1.4.jar  ^
  --main-class ru.teosa.pokemonhelper.PokemonHelperApplication  ^
  --java-options "--module-path app\javafx-sdk\lib" ^
  --java-options "--add-modules javafx.controls,javafx.fxml" ^

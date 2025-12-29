@@ -6,7 +6,7 @@
 
     <groupId>ru.teosa</groupId>
     <artifactId>pokemon-helper</artifactId>
-    <version>1.3</version>
+    <version>1.4</version>
     <name>PokemonHelper</name>
 
     <properties>

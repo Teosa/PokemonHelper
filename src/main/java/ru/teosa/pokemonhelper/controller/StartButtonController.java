@@ -1,14 +1,13 @@
 package ru.teosa.pokemonhelper.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import ru.teosa.pokemonhelper.Location;
 import ru.teosa.pokemonhelper.configuration.Properties;
 import ru.teosa.pokemonhelper.service.LoginService;
 import ru.teosa.pokemonhelper.service.MovementService;
@@ -17,6 +16,7 @@ import ru.teosa.pokemonhelper.utils.Logger;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Arrays;
 
 public class StartButtonController {
 
@@ -50,8 +50,8 @@ public class StartButtonController {
     @FXML
     private Button startButton;
 
-//    @FXML
-//    private Button testButton;
+    @FXML
+    private ComboBox<String> farmLocationCombo;
 
     public void init() {
         this.loginService = new LoginService(driver);
@@ -61,16 +61,11 @@ public class StartButtonController {
 
         // Предзаполняем поле сразу после открытия формы
         enemyTargetQty.setText("1000");
+
+        fillFarmLocationCombo();
+        farmLocationCombo.getSelectionModel().selectFirst();
     }
 
-//    @FXML
-//    protected void onTestButtonClick() {
-//        var npcs = driver.findElements(By.className("npc"));
-//
-//        System.out.println(npcs.size());
-//
-//        npcs.get(0).click();
-//    }
 
     @FXML
     protected void onStartButtonClick() {
@@ -80,6 +75,7 @@ public class StartButtonController {
 
         startButton.setDisable(true);
         enemyTargetQty.setDisable(true);
+        farmLocationCombo.setDisable(true);
 
         infoText.setText("Бот запущен " + AppUtils.getCurrentDateTimeFormated());
 
@@ -100,11 +96,14 @@ public class StartButtonController {
                     isLoggedIn = true;
                 }
 
+                Location selectedFarmLocation = Location.getByName(farmLocationCombo.getValue());
+
                 while (!Properties.getInstance().isLimitOver(enemyCountField.getText())) {
-                    movementService.resetLocation();
-                    movementService.heal();
+                    movementService.changeLocation(selectedFarmLocation.getParent());
+                    movementService.heal(selectedFarmLocation.getParent());
                     myTextArea.clear();
-                    movementService.moveToFields();
+                    movementService.changeLocation(selectedFarmLocation);
+                    movementService.work();
                 }
 
 //                infoText.setText("Бот завершил работу " + AppUtils.getCurrentDateTimeFormated());
@@ -116,6 +115,7 @@ public class StartButtonController {
             } finally {
                 startButton.setDisable(false);
                 enemyTargetQty.setDisable(false);
+                farmLocationCombo.setDisable(false);
             }
         });
 
@@ -128,6 +128,18 @@ public class StartButtonController {
         PrintWriter pw = new PrintWriter(sw);
         throwable.printStackTrace(pw);
         return sw.toString();
+    }
+
+    private void fillFarmLocationCombo() {
+        ObservableList<String> options =
+                FXCollections.observableArrayList(
+                        Arrays.stream(Location.values())
+                                .filter(location -> location.getParent() != null)
+                                .map(Location::getLocationName)
+                                .toList()
+                );
+
+        farmLocationCombo.getItems().addAll(options);
     }
 
 
